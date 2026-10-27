@@ -479,11 +479,19 @@ function initVoices() {
 function speakLocal(text) {
   if (!("speechSynthesis" in window) || !text) return;
   const synth = window.speechSynthesis;
-  try { if (synth.speaking || synth.pending) synth.cancel(); } catch {}
   const u = new SpeechSynthesisUtterance(text);
   u.lang = "ja-JP"; u.rate = 0.85; if (jaVoice) u.voice = jaVoice;
-  const go = () => { try { synth.resume(); synth.speak(u); } catch {} };
-  setTimeout(go, 55);
+  try {
+    // Speak immediately while we're still inside the user gesture (desktop
+    // browsers block speech started from a deferred/async context). Only when
+    // something is already playing do we cancel + briefly defer (Chrome bug).
+    if (synth.speaking || synth.pending) {
+      synth.cancel();
+      setTimeout(() => { try { synth.resume(); synth.speak(u); } catch {} }, 60);
+    } else {
+      synth.resume(); synth.speak(u);
+    }
+  } catch {}
 }
 
 // Natural neural voice via the Azure proxy Worker (see worker/README.md).
@@ -514,7 +522,14 @@ async function remoteTTS(text) {
 }
 function speakJa(text) {
   if (!text) return;
-  remoteTTS(text).then((ok) => { if (!ok) speakLocal(text); });
+  // When the neural proxy is off (default), speak synchronously so it stays
+  // inside the click's user-gesture (desktop requirement). Only the remote
+  // path (which is inherently async anyway) goes through a promise.
+  if (S.settings.ttsOn && (S.settings.ttsUrl || "").trim()) {
+    remoteTTS(text).then((ok) => { if (!ok) speakLocal(text); });
+  } else {
+    speakLocal(text);
+  }
 }
 
 /* ------------------------------------------------------------------- toast */
@@ -817,7 +832,7 @@ function renderLearn(no) {
   document.getElementById("closeX").onclick = () => go("/lesson/" + no);
   document.getElementById("sp").onclick = () => playWord(w);
   document.getElementById("nextBtn").onclick = () => { srsUpdate(w.id, true); LRN.idx++; save(); renderLearn(no); };
-  setTimeout(() => playWord(w), 200);
+  playWord(w); // in-gesture (triggered by tapping the lesson / Next)
 }
 function renderLearnDone(no) {
   LRN = null;
@@ -903,7 +918,7 @@ function renderQuestion() {
   document.getElementById("backBtn").onclick = () => go(SESS.opts.type === "practice" ? "/" : "/lesson/" + SESS.opts.lesson);
   document.getElementById("closeX").onclick = () => go(SESS.opts.type === "practice" ? "/" : "/lesson/" + SESS.opts.lesson);
   const sp = document.getElementById("sp"); if (sp) sp.onclick = () => playWord(w);
-  if (q.type === "listen") setTimeout(() => playWord(w), 250);
+  if (q.type === "listen") playWord(w); // in-gesture (triggered by Continue/choice)
 
   if (["mcq_meaning", "mcq_word", "listen"].includes(q.type)) {
     app().querySelectorAll(".choice").forEach((btn) => btn.onclick = () => gradeMcq(q, parseInt(btn.dataset.i, 10), btn));
@@ -1082,7 +1097,7 @@ function ntGen() {
   else { const n = ntRand(1, NT.range); NT.item = { numeral: n.toLocaleString("en-US"), kanji: numberToKanji(n), yomi: numberToYomi(n) }; }
   NT.revealed = false; NT.answered = false; NT.correct = false;
   ntRenderBody(true); ntRenderActions();
-  if (NT.practice) setTimeout(() => speakJa(NT.item.yomi), 220);
+  if (NT.practice) speakJa(NT.item.yomi); // in-gesture when triggered by Next/tab click
 }
 // The number/time is the hero; the written form is secondary and hidden.
 function ntWritingHtml() {

@@ -1,0 +1,14 @@
+{
+  "name": "Tomoni — học tiếng Nhật",
+  "short_name": "Tomoni",
+  "description": "Tomoni (共に) — bạn đồng hành học tiếng Nhật: từ vựng, số & giờ, và hơn thế nữa.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f1ea",
+  "theme_color": "#f4f1ea",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

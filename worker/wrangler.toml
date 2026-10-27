@@ -1,0 +1,7 @@
+name = "japanese-learner-tts"
+main = "azure-tts-worker.js"
+compatibility_date = "2024-11-01"
+
+# Secrets (do NOT put the key here — set them with `wrangler secret put`):
+#   wrangler secret put AZURE_KEY
+#   wrangler secret put AZURE_REGION     # e.g. southeastasia, japaneast, eastus

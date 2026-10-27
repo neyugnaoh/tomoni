@@ -1,0 +1,9 @@
+# Source Anki deck — NOT needed for the hosted site (only to re-run convert.js).
+# The generated output (data/ and media/) is committed instead.
+*.apkg
+.apkg_tmp/
+
+.DS_Store
+node_modules/
+worker/node_modules/
+worker/.wrangler/

@@ -663,6 +663,10 @@ function renderVocab() {
 }
 
 /* -------------------------------------------------------------------- SETS */
+// Authoring (create / import / export / edit / delete sets) is enabled only
+// when running locally; the deployed site is consume-only. Shared sets are
+// published by creating them locally and committing them (see sets/README.md).
+const AUTHOR_MODE = location.protocol === "file:" || ["localhost", "127.0.0.1", ""].includes(location.hostname);
 function renderSets() {
   const rows = [];
   for (const s of bundledSets()) if (!SETSREG.hiddenBundled.includes(s.id)) rows.push({ id: s.id, name: s.name, count: (s.words || []).length, bundled: true });
@@ -676,13 +680,10 @@ function renderSets() {
         <span class="set-mark">${s.id === active ? ICON.maru : ""}</span>
         <span class="set-info"><b>${esc(s.name)}</b><small>${t("wordsN", s.count)}${s.bundled ? " · " + t("builtin") : ""}${s.id === active ? " · " + t("current") : ""}</small></span>
       </button>
-      ${!s.bundled ? `<button class="icon-btn set-edit" data-edit="${s.id}" aria-label="edit">${ICON.pencil}</button>` : ""}
-      ${canDelete ? `<button class="icon-btn set-del" data-del="${s.id}" aria-label="delete">${ICON.trash}</button>` : ""}
+      ${AUTHOR_MODE && !s.bundled ? `<button class="icon-btn set-edit" data-edit="${s.id}" aria-label="edit">${ICON.pencil}</button>` : ""}
+      ${AUTHOR_MODE && canDelete ? `<button class="icon-btn set-del" data-del="${s.id}" aria-label="delete">${ICON.trash}</button>` : ""}
     </div>`).join("");
-  app().innerHTML = `${topbarMin(t("sets"))}
-    <div class="view">
-      <div class="sub muted" style="margin-bottom:1rem">${t("chooseSet")}</div>
-      <div class="set-list">${list}</div>
+  const authoring = AUTHOR_MODE ? `
       ${anyHidden ? `<button class="btn btn-block mt" id="restoreBtn">${t("restoreBuiltin")}</button>` : ""}
       <input type="file" id="importFile" accept=".apkg,.json,.csv,.txt,.tsv" style="display:none">
       <button class="btn btn-ink btn-block btn-lg mt" id="createBtn">${ICON.plus}${t("createSet")}</button>
@@ -690,7 +691,12 @@ function renderSets() {
       <div class="grade-row mt">
         <button class="btn btn-ink-outline btn-block" id="expApkg">${ICON.download}${t("exportApkg")}</button>
         <button class="btn btn-ink-outline btn-block" id="expJson">${ICON.download}${t("exportJson")}</button>
-      </div>
+      </div>` : "";
+  app().innerHTML = `${topbarMin(t("sets"))}
+    <div class="view">
+      <div class="sub muted" style="margin-bottom:1rem">${t("chooseSet")}</div>
+      <div class="set-list">${list}</div>
+      ${authoring}
     </div>`;
   bindBack("/");
   app().querySelectorAll(".set-pick").forEach((b) => b.onclick = () => switchSet(b.dataset.id));
@@ -707,6 +713,7 @@ function renderSets() {
     }
     saveSetsReg(); await loadVocab(); renderSets();
   });
+  if (!AUTHOR_MODE) return; // deployed site is consume-only
   const restore = document.getElementById("restoreBtn");
   if (restore) restore.onclick = () => { SETSREG.hiddenBundled = []; saveSetsReg(); renderSets(); };
   document.getElementById("createBtn").onclick = () => go("/create");
@@ -724,6 +731,7 @@ function renderSets() {
 
 /* ------------------------------------------------------------ CREATE SET */
 function renderCreate() {
+  if (!AUTHOR_MODE) { go("/sets"); return; }
   const example = "みず, みず, water, 水, 1\nねこ, ねこ, cat, 猫, 1\nがっこう, がっこう, school, 学校, 2";
   app().innerHTML = `${topbarMin(t("createSet"))}
     <div class="view">
@@ -746,6 +754,7 @@ function renderCreate() {
 
 /* ------------------------------------------------------------ EDIT SET (incremental) */
 async function renderEditSet(id) {
+  if (!AUTHOR_MODE) { go("/sets"); return; }
   const set = await idbGet(id).catch(() => null);
   if (!set || !set.words) { go("/sets"); return; }
   const meta = SETSREG.custom.find((s) => s.id === id) || { name: set.name };

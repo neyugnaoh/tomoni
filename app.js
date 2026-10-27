@@ -24,6 +24,7 @@ const ICON = {
   trash: `<svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6 7l1 13h10l1-13"/></svg>`,
   pencil: `<svg class="ico" viewBox="0 0 24 24"><path d="M14 5l5 5M4 20l1-4L16 5l3 3L8 19l-4 1z"/></svg>`,
   info: `<svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5" stroke-width="1.9"/><circle cx="12" cy="7.6" r="0.4" class="ico-fill"/></svg>`,
+  image: `<svg class="ico" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="M5 17l4.5-4 3 2.5L16 11l3 3.5"/></svg>`,
   download: `<svg class="ico" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg>`,
 };
 const ENSO = `<svg class="enso" viewBox="0 0 100 100" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" d="M52 13 C80 14 90 40 85 58 C80 80 58 90 40 85 C19 80 10 56 17 38 C23 22 40 13 60 15"/></svg>`;
@@ -68,9 +69,14 @@ const I18N = {
     builtin: "Có sẵn", deleteSet: "Xóa bộ từ", deleteSetConfirm: "Xóa bộ từ này?", restoreBuiltin: "Khôi phục bộ có sẵn",
     importing: "Đang nhập…", imported: (n) => `Đã nhập ${n} từ`, importFail: "Nhập thất bại: ",
     createSet: "Tạo bộ từ", createHelp: "Tự nhập hoặc dán danh sách từ (cũng mở được file .csv).",
-    createName: "Tên bộ từ", createFormat: "Mỗi dòng một từ — từ, cách đọc, nghĩa, kanji, bài (cách nhau bằng dấu phẩy hoặc tab)",
+    createName: "Tên bộ từ", createFormat: "Mỗi dòng: từ, cách đọc, nghĩa, kanji, bài, ảnh(URL) — cách nhau bằng dấu phẩy/tab",
     createMake: "Tạo", createEmpty: "Chưa có từ nào",
     editSet: "Sửa bộ từ", addWords: "Thêm từ (cuốn chiếu)", addBtn: "Thêm vào",
+    imgHint: "nhấn ô ảnh để thêm hình", imgPrompt: "Dán URL ảnh (hoặc để trống rồi OK để tải ảnh lên)",
+    addWord: "Thêm từ", fWord: "Từ", fReading: "Cách đọc", fMeaning: "Nghĩa", fKanji: "Kanji", fLesson: "Bài", orPaste: "Hoặc dán danh sách (CSV)",
+    saveWord: "Lưu", cancelEdit: "Hủy",
+    byTag: "Theo chủ đề",
+    imgDrop: "Chạm để tải ảnh · hoặc dán (⌘/Ctrl+V)", imgAdded: "Đã thêm ảnh",
     loading: "Đang tải…",
   },
   en: {
@@ -109,9 +115,14 @@ const I18N = {
     builtin: "Built-in", deleteSet: "Delete set", deleteSetConfirm: "Delete this set?", restoreBuiltin: "Restore built-in set",
     importing: "Importing…", imported: (n) => `Imported ${n} words`, importFail: "Import failed: ",
     createSet: "Create set", createHelp: "Type or paste a word list (also opens .csv files).",
-    createName: "Set name", createFormat: "One word per line — word, reading, meaning, kanji, lesson (comma- or tab-separated)",
+    createName: "Set name", createFormat: "Per line: word, reading, meaning, kanji, lesson, image(URL) — comma/tab separated",
     createMake: "Create", createEmpty: "No words yet",
     editSet: "Edit set", addWords: "Add words", addBtn: "Add",
+    imgHint: "tap the image box to add a picture", imgPrompt: "Paste an image URL (or leave empty and OK to upload)",
+    addWord: "Add a word", fWord: "Word", fReading: "Reading", fMeaning: "Meaning", fKanji: "Kanji", fLesson: "Lesson", orPaste: "Or paste a list (CSV)",
+    saveWord: "Save", cancelEdit: "Cancel",
+    byTag: "By topic",
+    imgDrop: "Tap to upload · or paste (⌘/Ctrl+V)", imgAdded: "Image added",
     loading: "Loading…",
   },
   ja: {
@@ -150,9 +161,14 @@ const I18N = {
     builtin: "内蔵", deleteSet: "セット削除", deleteSetConfirm: "このセットを削除？", restoreBuiltin: "内蔵セットを復元",
     importing: "読み込み中…", imported: (n) => `${n}語を読み込みました`, importFail: "読み込み失敗: ",
     createSet: "セット作成", createHelp: "単語リストを入力/貼り付け（.csv も可）。",
-    createName: "セット名", createFormat: "1行1語 — 単語, 読み, 意味, 漢字, 課（カンマ/タブ区切り）",
+    createName: "セット名", createFormat: "1行: 単語, 読み, 意味, 漢字, 課, 画像(URL)（カンマ/タブ区切り）",
     createMake: "作成", createEmpty: "単語がありません",
     editSet: "セット編集", addWords: "単語を追加", addBtn: "追加",
+    imgHint: "画像枠をタップで追加", imgPrompt: "画像URLを貼り付け（空のままOKでアップロード）",
+    addWord: "単語を追加", fWord: "単語", fReading: "読み", fMeaning: "意味", fKanji: "漢字", fLesson: "課", orPaste: "または一覧を貼り付け（CSV）",
+    saveWord: "保存", cancelEdit: "キャンセル",
+    byTag: "トピック別",
+    imgDrop: "タップでアップロード・⌘/Ctrl+Vで貼り付け", imgAdded: "画像を追加しました",
     loading: "読み込み中…",
   },
 };
@@ -212,14 +228,27 @@ function activeSetName() {
   return (bundledById(id) || SETSREG.custom.find((s) => s.id === id) || {}).name || "—";
 }
 
-/* IndexedDB — custom set payloads (can be large) */
+/* Custom set payload storage.
+ * IndexedDB is blocked/hangs on file:// (double-click), so fall back to
+ * localStorage there (and whenever IndexedDB is unavailable). */
+const USE_LS = location.protocol === "file:" || !window.indexedDB;
+const LS_SET = (k) => "jl-set-" + k;
 function idbOpen() { return new Promise((res, rej) => { const r = indexedDB.open("jl", 1); r.onupgradeneeded = () => r.result.createObjectStore("sets"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
-async function idbPut(k, v) { const d = await idbOpen(); return new Promise((res, rej) => { const tx = d.transaction("sets", "readwrite"); tx.objectStore("sets").put(v, k); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); }); }
-async function idbGet(k) { const d = await idbOpen(); return new Promise((res, rej) => { const tx = d.transaction("sets", "readonly"); const q = tx.objectStore("sets").get(k); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); }
-async function idbDel(k) { const d = await idbOpen(); return new Promise((res, rej) => { const tx = d.transaction("sets", "readwrite"); tx.objectStore("sets").delete(k); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); }); }
+async function idbPut(k, v) {
+  if (USE_LS) { try { localStorage.setItem(LS_SET(k), JSON.stringify(v)); return; } catch (e) { throw new Error("storage full (try smaller images)"); } }
+  const d = await idbOpen(); return new Promise((res, rej) => { const tx = d.transaction("sets", "readwrite"); tx.objectStore("sets").put(v, k); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); });
+}
+async function idbGet(k) {
+  if (USE_LS) { try { return JSON.parse(localStorage.getItem(LS_SET(k))); } catch { return null; } }
+  const d = await idbOpen(); return new Promise((res, rej) => { const tx = d.transaction("sets", "readonly"); const q = tx.objectStore("sets").get(k); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+}
+async function idbDel(k) {
+  if (USE_LS) { localStorage.removeItem(LS_SET(k)); return; }
+  const d = await idbOpen(); return new Promise((res, rej) => { const tx = d.transaction("sets", "readwrite"); tx.objectStore("sets").delete(k); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); });
+}
 
 /* -------------------------------------------------------------------- data */
-let VOCAB = [], BY_LESSON = {}; const LESSONS = [];
+let VOCAB = [], BY_LESSON = {}, BY_TAG = {}; const LESSONS = [], TAGS = [];
 async function loadVocab() {
   const id = activeSetId();
   const bundled = bundledById(id);
@@ -230,10 +259,14 @@ async function loadVocab() {
     else { SETSREG.active = DEFAULT_SET_ID(); saveSetsReg(); VOCAB = (bundledById(activeSetId()) || {}).words || []; }
   }
   if (!VOCAB.length) throw new Error("vocab data missing — run: node convert.js");
-  BY_LESSON = {};
-  for (const w of VOCAB) (BY_LESSON[w.lesson] ||= []).push(w);
-  LESSONS.length = 0;
+  BY_LESSON = {}; BY_TAG = {};
+  for (const w of VOCAB) {
+    (BY_LESSON[w.lesson] ||= []).push(w);
+    for (const tag of (w.tags || [])) (BY_TAG[tag] ||= []).push(w);
+  }
+  LESSONS.length = 0; TAGS.length = 0;
   for (const k of Object.keys(BY_LESSON).map(Number).sort((a, b) => a - b)) LESSONS.push(k);
+  for (const tag of Object.keys(BY_TAG).sort()) TAGS.push(tag);
 }
 
 /* ---------------------------------------------- lazy libraries (import/export) */
@@ -300,9 +333,9 @@ function parseWords(text) {
     const delim = line.includes("\t") ? "\t" : (line.includes(",") ? "," : ";");
     const cols = line.split(delim).map((c) => c.trim().replace(/^"|"$/g, ""));
     if (i === 0) { const low = cols.map((c) => c.toLowerCase()); if (low.some((c) => ["word", "từ", "reading", "kana", "meaning", "nghĩa", "nghia"].includes(c))) return; }
-    const [word, reading, meaning, kanji, lesson] = cols;
+    const [word, reading, meaning, kanji, lesson, image] = cols;
     if (!word) return;
-    words.push({ id: base * 1000 + words.length, lesson: parseInt(lesson, 10) || 1, word, kanji: kanji || "", reading: reading || word, romaji: "", meaning_en: meaning || "", picture: null, audio: null, example: { jp: "", en: "", audio: null }, forms: {} });
+    words.push({ id: base * 1000 + words.length, lesson: parseInt(lesson, 10) || 1, word, kanji: kanji || "", reading: reading || word, romaji: "", meaning_en: meaning || "", picture: image || null, audio: null, example: { jp: "", en: "", audio: null }, forms: {} });
   });
   return words;
 }
@@ -395,6 +428,8 @@ const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) {
 const sample = (a, n) => shuffle(a).slice(0, n);
 const esc = (s) => (s == null ? "" : String(s)).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const normalize = (s) => (s || "").toLowerCase().normalize("NFKC").replace(/[\s　.,!?。、ー~'’"\-]/g, "");
+// Bundled media is served from /media; custom sets store full URLs or data: URIs.
+const picSrc = (p) => (/^(https?:|data:|blob:)/i.test(p || "") ? p : "media/" + p);
 
 /* genkō hero */
 function genkoCells(text, sm) { return `<div class="cells">${[...String(text)].map((c) => `<span class="cell${sm ? " sm" : ""}">${esc(c)}</span>`).join("")}</div>`; }
@@ -545,6 +580,8 @@ function route() {
   if ((m = h.match(/^\/lesson\/(-?\d+)$/))) return renderIntro(parseInt(m[1], 10));
   if ((m = h.match(/^\/learn\/(-?\d+)$/))) return renderLearn(parseInt(m[1], 10));
   if ((m = h.match(/^\/quiz\/(-?\d+)$/))) return startQuiz({ type: "lesson", lesson: parseInt(m[1], 10) });
+  if ((m = h.match(/^\/tag\/(.+)$/))) return renderTagIntro(decodeURIComponent(m[1]));
+  if ((m = h.match(/^\/quiz-tag\/(.+)$/))) return startQuiz({ type: "tag", tag: decodeURIComponent(m[1]) });
   if (h === "/practice") return startQuiz({ type: "practice" });
   if (h === "/numbers") return renderNumbers();
   if (h === "/sets") return renderSets();
@@ -644,6 +681,10 @@ function renderLessons() {
   let col = core.map((no, i) => lcell(no, { label: `${t("lesson")} ${no}` }, i)).join("");
   if (BY_LESSON[0]?.length) col += lcell(0, { label: t("extra") }, core.length);
 
+  const tagRow = TAGS.map((tag) => {
+    const n = BY_TAG[tag].length;
+    return `<button class="tag-pill" data-tag="${esc(tag)}">${esc(tag)}<span class="tag-count">${n}</span></button>`;
+  }).join("");
   app().innerHTML = `${topbarMin(activeSetName())}
     <div class="view">
       <button class="btn btn-ink btn-block practice" id="practiceBtn">
@@ -652,10 +693,12 @@ function renderLessons() {
       </button>
       <div class="section-head">${t("coreLessons")}</div>
       <div class="lesson-col winding">${col}</div>
+      ${TAGS.length ? `<div class="section-head">${t("byTag")}</div><div class="tag-row">${tagRow}</div>` : ""}
     </div>`;
   bindBack("/vocab");
   document.getElementById("practiceBtn").onclick = () => go("/practice");
   app().querySelectorAll("[data-target]").forEach((b) => b.onclick = () => go(b.dataset.target));
+  app().querySelectorAll(".tag-pill").forEach((b) => b.onclick = () => go("/tag/" + encodeURIComponent(b.dataset.tag)));
 }
 
 /* -------------------------------------------------------------------- SETS */
@@ -712,7 +755,7 @@ function renderSets() {
   if (!AUTHOR_MODE) return; // deployed site is consume-only
   const restore = document.getElementById("restoreBtn");
   if (restore) restore.onclick = () => { SETSREG.hiddenBundled = []; saveSetsReg(); renderSets(); };
-  document.getElementById("createBtn").onclick = () => go("/create");
+  document.getElementById("createBtn").onclick = () => { resetCreate(); go("/create"); };
   const fileInp = document.getElementById("importFile");
   document.getElementById("importBtn").onclick = () => fileInp.click();
   fileInp.onchange = async () => {
@@ -726,24 +769,74 @@ function renderSets() {
 }
 
 /* ------------------------------------------------------------ CREATE SET */
+let CREATE = { name: "", words: [], pic: null, lesson: 1 };
+function resetCreate() { CREATE = { name: "", words: [], pic: null, lesson: 1 }; }
+// Update the image drop-zone in place (so typed fields aren't wiped by a re-render).
+function updateCreatePicBox() {
+  const el = document.getElementById("fPic"); if (!el) return;
+  if (CREATE.pic) { el.classList.add("has"); el.style.backgroundImage = `url('${picSrc(CREATE.pic).replace(/'/g, "%27")}')`; el.innerHTML = ""; }
+  else { el.classList.remove("has"); el.style.backgroundImage = ""; el.innerHTML = `${ICON.image}<span>${t("imgDrop")}</span>`; }
+}
 function renderCreate() {
   if (!AUTHOR_MODE) { go("/sets"); return; }
-  const example = "みず, みず, water, 水, 1\nねこ, ねこ, cat, 猫, 1\nがっこう, がっこう, school, 学校, 2";
+  const wl = CREATE.words.map((w, i) => `<div class="wl">
+    ${w.picture ? `<span class="wl-pic has" style="background-image:url('${esc(picSrc(w.picture)).replace(/'/g, "%27")}')"></span>` : `<span class="wl-pic"></span>`}
+    <span class="wl-jp">${esc(w.kanji || w.word)}</span>
+    <span class="wl-en">${esc(w.meaning_en)}</span>
+    <button class="icon-btn wl-del" data-i="${i}" aria-label="delete">${ICON.trash}</button>
+  </div>`).join("");
   app().innerHTML = `${topbarMin(t("createSet"))}
     <div class="view">
-      <div class="sub muted" style="margin-bottom:.8rem">${t("createHelp")}</div>
-      <input class="tts-url" id="setName" type="text" autocomplete="off" placeholder="${t("createName")}">
-      <div class="muted" style="font-size:.78rem;margin:.6rem 0 .3rem">${t("createFormat")}</div>
-      <textarea id="setRows" class="set-textarea" spellcheck="false" placeholder="${esc(example)}"></textarea>
+      <input class="finput" id="setName" type="text" autocomplete="off" placeholder="${t("createName")}" value="${esc(CREATE.name)}">
+      <div class="section-head" style="text-align:left;margin:1.2rem 0 .5rem">${t("addWord")}</div>
+      <div class="wform">
+        <div class="wform-row"><input class="finput" id="fWord" placeholder="${t("fWord")}"><input class="finput" id="fReading" placeholder="${t("fReading")}"></div>
+        <input class="finput" id="fMeaning" placeholder="${t("fMeaning")}">
+        <div class="wform-row"><input class="finput" id="fKanji" placeholder="${t("fKanji")}"><input class="finput" id="fLesson" type="number" min="1" value="${CREATE.lesson}" placeholder="${t("fLesson")}"></div>
+        <button class="wform-drop${CREATE.pic ? " has" : ""}" id="fPic" aria-label="image"${CREATE.pic ? ` style="background-image:url('${esc(picSrc(CREATE.pic)).replace(/'/g, "%27")}')"` : ""}>${CREATE.pic ? "" : `${ICON.image}<span>${t("imgDrop")}</span>`}</button>
+        <button class="btn btn-ink btn-block" id="addWordBtn">${ICON.plus}${t("addBtn")}</button>
+      </div>
+      <div class="section-head" style="text-align:left;margin:1.2rem 0 .4rem">${t("wordsN", CREATE.words.length)}</div>
+      <div class="wordlist" id="wlist">${wl}</div>
       <button class="btn btn-ink btn-block btn-lg mt" id="makeBtn">${t("createMake")}</button>
+      <details class="mt"><summary class="muted" style="font-size:.85rem">${t("orPaste")}</summary>
+        <div class="muted" style="font-size:.76rem;margin:.5rem 0 .3rem">${t("createFormat")}</div>
+        <textarea id="setRows" class="set-textarea" style="min-height:120px" spellcheck="false" placeholder="ねこ, ねこ, con mèo, 猫, 1"></textarea>
+        <button class="btn btn-ink-outline btn-block mt" id="pasteBtn">${ICON.plus}${t("addBtn")}</button>
+      </details>
+      <input type="file" id="picInput" accept="image/*" style="display:none">
     </div>`;
   bindBack("/sets");
-  document.getElementById("makeBtn").onclick = async () => {
-    const name = document.getElementById("setName").value.trim() || t("createName");
-    const words = parseWords(document.getElementById("setRows").value);
-    if (!words.length) { toast(t("createEmpty")); return; }
+  const g = (id) => document.getElementById(id);
+  g("setName").oninput = (e) => CREATE.name = e.target.value;
+  // image for the word being entered (upload or URL) — update button in place
+  const picInput = g("picInput");
+  g("fPic").onclick = () => {
+    const url = prompt(t("imgPrompt"), "");
+    if (url === null) return;
+    if (url.trim()) { CREATE.pic = url.trim(); updateCreatePicBox(); } else { picInput.click(); }
+  };
+  picInput.onchange = async () => { const f = picInput.files[0]; if (!f) return; try { CREATE.pic = await fileToDataUrl(f, 400); updateCreatePicBox(); } catch {} };
+  g("addWordBtn").onclick = () => {
+    const word = g("fWord").value.trim();
+    if (!word) { toast(t("fWord")); g("fWord").focus(); return; }
+    const lesson = parseInt(g("fLesson").value, 10) || 1;
+    CREATE.lesson = lesson;
+    CREATE.words.push({ id: Date.now() * 1000 + CREATE.words.length, lesson, word, reading: g("fReading").value.trim() || word, meaning_en: g("fMeaning").value.trim(), kanji: g("fKanji").value.trim(), romaji: "", picture: CREATE.pic || null, audio: null, example: { jp: "", en: "", audio: null }, forms: {} });
+    CREATE.pic = null;
+    renderCreate(); g("fWord").focus();
+  };
+  g("pasteBtn").onclick = () => {
+    const added = parseWords(g("setRows").value);
+    if (!added.length) { toast(t("createEmpty")); return; }
+    CREATE.words.push(...added); renderCreate();
+  };
+  app().querySelectorAll(".wl-del").forEach((b) => b.onclick = () => { CREATE.words.splice(parseInt(b.dataset.i, 10), 1); renderCreate(); });
+  g("makeBtn").onclick = async () => {
+    if (!CREATE.words.length) { toast(t("createEmpty")); return; }
+    const name = (CREATE.name || "").trim() || t("createName");
     app().innerHTML = `<div class="loading">${t("importing")}</div>`;
-    try { const r = await saveCustomSet(name, words); toast(t("imported", r.count)); await switchSet(r.id); }
+    try { const r = await saveCustomSet(name, CREATE.words); const cnt = r.count; resetCreate(); toast(t("imported", cnt)); await switchSet(r.id); }
     catch (e) { renderCreate(); toast(t("importFail") + (e.message || e)); }
   };
 }
@@ -754,15 +847,29 @@ async function renderEditSet(id) {
   const set = await idbGet(id).catch(() => null);
   if (!set || !set.words) { go("/sets"); return; }
   const meta = SETSREG.custom.find((s) => s.id === id) || { name: set.name };
-  const wordRow = (w, i) => `<div class="wl"><span class="wl-jp">${esc(w.kanji || w.word)}</span><span class="wl-en">${esc(w.meaning_en)}</span><button class="icon-btn wl-del" data-i="${i}" aria-label="delete">${ICON.trash}</button></div>`;
+  const wordRow = (w, i) => `<div class="wl" data-wi="${i}">
+    <button class="wl-pic${w.picture ? " has" : ""}" data-pi="${i}" aria-label="image"${w.picture ? ` style="background-image:url('${esc(picSrc(w.picture)).replace(/'/g, "%27")}')"` : ""}>${w.picture ? "" : ICON.image}</button>
+    <span class="wl-jp">${esc(w.kanji || w.word)}</span>
+    <span class="wl-en">${esc(w.meaning_en)}</span>
+    <span class="wl-lesson-tag">${t("lesson")} ${w.lesson || 1}</span>
+    <button class="icon-btn wl-edit" data-i="${i}" aria-label="edit">${ICON.pencil}</button>
+    <button class="icon-btn wl-del" data-i="${i}" aria-label="delete">${ICON.trash}</button>
+  </div>
+  <div class="wl-editform" id="wef-${i}" style="display:none">
+    <div class="wform-row"><input class="finput wef-word" placeholder="${t("fWord")}" value="${esc(w.word)}"><input class="finput wef-reading" placeholder="${t("fReading")}" value="${esc(w.reading || w.word)}"></div>
+    <input class="finput wef-meaning" placeholder="${t("fMeaning")}" value="${esc(w.meaning_en)}">
+    <div class="wform-row"><input class="finput wef-kanji" placeholder="${t("fKanji")}" value="${esc(w.kanji || "")}"><input class="finput wef-lesson" type="number" min="1" placeholder="${t("fLesson")}" value="${w.lesson || 1}"></div>
+    <div class="wform-row"><button class="btn btn-ink wef-save" data-i="${i}">${t("saveWord")}</button><button class="btn btn-ink-outline wef-cancel" data-i="${i}">${t("cancelEdit")}</button></div>
+  </div>`;
   app().innerHTML = `${topbarMin(t("editSet"))}
     <div class="view">
       <input class="tts-url" id="setName" type="text" autocomplete="off" value="${esc(meta.name || "")}" placeholder="${t("createName")}">
       <div class="muted" style="font-size:.78rem;margin:.9rem 0 .3rem">${t("addWords")} — ${t("createFormat")}</div>
       <textarea id="addRows" class="set-textarea" style="min-height:120px" spellcheck="false" placeholder="みず, みず, water, 水, 1"></textarea>
       <button class="btn btn-ink btn-block mt" id="addBtn">${ICON.plus}${t("addBtn")}</button>
-      <div class="section-head" style="text-align:left;margin:1.4rem 0 .4rem">${t("wordsN", set.words.length)}</div>
+      <div class="section-head" style="text-align:left;margin:1.4rem 0 .4rem">${t("wordsN", set.words.length)} · ${t("imgHint")}</div>
       <div class="wordlist" id="wlist">${set.words.map(wordRow).join("")}</div>
+      <input type="file" id="picInput" accept="image/*" style="display:none">
     </div>`;
   bindBack("/sets");
   const persist = async () => {
@@ -780,6 +887,56 @@ async function renderEditSet(id) {
   app().querySelectorAll(".wl-del").forEach((b) => b.onclick = async () => {
     set.words.splice(parseInt(b.dataset.i, 10), 1); await persist(); renderEditSet(id);
   });
+  // Per-word inline edit.
+  app().querySelectorAll(".wl-edit").forEach((b) => b.onclick = () => {
+    const i = parseInt(b.dataset.i, 10);
+    const form = document.getElementById(`wef-${i}`);
+    const isOpen = form.style.display !== "none";
+    app().querySelectorAll(".wl-editform").forEach((f) => { f.style.display = "none"; });
+    if (!isOpen) { form.style.display = ""; form.querySelector(".wef-word").focus(); }
+  });
+  app().querySelectorAll(".wef-cancel").forEach((b) => b.onclick = () => {
+    document.getElementById(`wef-${parseInt(b.dataset.i, 10)}`).style.display = "none";
+  });
+  app().querySelectorAll(".wef-save").forEach((b) => b.onclick = async () => {
+    const i = parseInt(b.dataset.i, 10);
+    const form = document.getElementById(`wef-${i}`);
+    const word = form.querySelector(".wef-word").value.trim();
+    if (!word) return;
+    set.words[i] = { ...set.words[i], word, reading: form.querySelector(".wef-reading").value.trim() || word, meaning_en: form.querySelector(".wef-meaning").value.trim(), kanji: form.querySelector(".wef-kanji").value.trim(), lesson: parseInt(form.querySelector(".wef-lesson").value, 10) || 1 };
+    await persist(); renderEditSet(id);
+  });
+  // Per-word image: tap → paste a URL, or leave empty + OK to upload (downscaled).
+  const picInput = document.getElementById("picInput");
+  let pendingPic = -1;
+  app().querySelectorAll(".wl-pic").forEach((b) => b.onclick = async () => {
+    const i = parseInt(b.dataset.pi, 10);
+    const url = prompt(t("imgPrompt"), set.words[i].picture && /^https?:/.test(set.words[i].picture) ? set.words[i].picture : "");
+    if (url === null) return;                   // cancelled
+    if (url.trim()) { set.words[i].picture = url.trim(); await persist(); renderEditSet(id); }
+    else { pendingPic = i; picInput.value = ""; picInput.click(); } // empty → upload
+  });
+  picInput.onchange = async () => {
+    const f = picInput.files[0]; if (!f || pendingPic < 0) return;
+    try { set.words[pendingPic].picture = await fileToDataUrl(f, 400); await persist(); renderEditSet(id); }
+    catch { toast(t("importFail") + "image"); }
+  };
+}
+// Downscale an image file to a small data URL (keeps IndexedDB light).
+function fileToDataUrl(file, max) {
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const s = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL("image/jpeg", 0.82));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error("img")); };
+    img.src = url;
+  });
 }
 
 /* ------------------------------------------------------------ LESSON INTRO */
@@ -788,7 +945,8 @@ function renderIntro(no) {
   const title = no === 0 ? t("extra") : `${t("lesson")} ${no}`;
   const list = ws.map((w) => {
     const box = S.progress[w.id]?.box || 0;
-    return `<div class="wl"><span class="wl-jp">${esc(w.kanji || w.word)}</span><span class="wl-en">${esc(w.meaning_en)}</span><span class="wl-box ${box >= 4 ? "b" : ""}"></span></div>`;
+    const chips = (w.tags || []).map((g) => `<span class="tag-chip">${esc(g)}</span>`).join("");
+    return `<div class="wl"><span class="wl-jp">${esc(w.kanji || w.word)}</span><div class="wl-right"><span class="wl-en">${esc(w.meaning_en)}</span>${chips ? `<div class="wl-tags">${chips}</div>` : ""}</div><span class="wl-box ${box >= 4 ? "b" : ""}"></span></div>`;
   }).join("");
   app().innerHTML = `${topbarMin(title)}
     <div class="view intro">
@@ -806,6 +964,24 @@ function renderIntro(no) {
   document.getElementById("testBtn").onclick = () => go("/quiz/" + no);
 }
 
+function renderTagIntro(tag) {
+  const ws = BY_TAG[tag] || []; if (!ws.length) { go("/"); return; }
+  const list = ws.map((w) => {
+    const box = S.progress[w.id]?.box || 0;
+    return `<div class="wl"><span class="wl-jp">${esc(w.kanji || w.word)}</span><div class="wl-right"><span class="wl-en">${esc(w.meaning_en)}</span><span class="wl-lesson-tag">${t("lesson")} ${w.lesson}</span></div><span class="wl-box ${box >= 4 ? "b" : ""}"></span></div>`;
+  }).join("");
+  app().innerHTML = `${topbarMin(esc(tag))}
+    <div class="view intro">
+      <div class="big">${esc(tag)}</div>
+      <div class="sub">${t("wordsN", ws.length)}</div>
+      <button class="btn btn-ink btn-block btn-lg" id="testBtn">${t("test")}</button>
+      <div class="section-head" style="text-align:left;margin-left:.1rem">${t("reviewWords")}</div>
+      <div class="wordlist">${list}</div>
+    </div>`;
+  bindBack("/lessons");
+  document.getElementById("testBtn").onclick = () => go("/quiz-tag/" + encodeURIComponent(tag));
+}
+
 /* ------------------------------------------------------------- LEARN cards */
 let LRN = null;
 function renderLearn(no) {
@@ -820,7 +996,7 @@ function renderLearn(no) {
       <div class="q-area">
         <div class="fc">
           <div class="fc-face">
-            ${w.picture ? `<img class="q-pic" src="media/${esc(w.picture)}" alt="" style="width:130px">` : ""}
+            ${w.picture ? `<img class="q-pic" src="${esc(picSrc(w.picture))}" alt="" style="width:130px">` : ""}
             ${wordHero(w, { rubyHidden: false, ink: true })}
             <div class="q-meaning" style="font-size:1.25rem">${esc(w.meaning_en)}</div>
             <div class="muted" style="font-size:.9rem">${esc(w.romaji)}</div>
@@ -878,6 +1054,9 @@ function startQuiz(opts) {
     let due = allDue();
     if (due.length < 8) { const extra = VOCAB.filter((w) => !due.includes(w)).sort((a, b) => (S.progress[a.id]?.box || 0) - (S.progress[b.id]?.box || 0)); due = due.concat(extra.slice(0, 12 - due.length)); }
     words = shuffle(due).slice(0, 12); pool = VOCAB; count = Math.max(6, Math.min(12, words.length));
+  } else if (opts.type === "tag") {
+    words = BY_TAG[opts.tag] || []; if (!words.length) { go("/"); return; }
+    pool = words.length >= 5 ? words : VOCAB; count = Math.min(12, Math.max(6, words.length));
   } else {
     words = BY_LESSON[opts.lesson] || []; if (!words.length) { go("/"); return; }
     pool = words.length >= 5 ? words : VOCAB; count = Math.min(12, Math.max(6, words.length));
@@ -896,13 +1075,13 @@ function renderQuestion() {
   let body = "";
   if (q.type === "mcq_meaning") {
     body = `<div class="q-instruction">${t("iMeaning")}</div>
-      <div class="q-hero">${w.picture ? `<img class="q-pic" src="media/${esc(w.picture)}" alt="">` : ""}${wordHero(w, { rubyHidden: false, ink: true })}
+      <div class="q-hero">${w.picture ? `<img class="q-pic" src="${esc(picSrc(w.picture))}" alt="">` : ""}${wordHero(w, { rubyHidden: false, ink: true })}
       <button class="icon-btn q-sound" id="sp" aria-label="sound">${ICON.sound}</button></div>
       <div class="choices">${q.options.map((o, i) => `<button class="choice" data-i="${i}">${esc(o.meaning_en)}</button>`).join("")}</div>`;
   } else if (q.type === "mcq_word") {
     body = `<div class="q-instruction">${t("iWord")}</div>
       <div class="q-hero"><div class="q-meaning">${esc(w.meaning_en)}</div></div>
-      <div class="choices">${q.options.map((o, i) => `<button class="choice" data-i="${i}">${o.picture ? `<img class="c-pic" src="media/${esc(o.picture)}" alt="">` : ""}<span class="jp">${esc(o.kanji || o.word)}</span></button>`).join("")}</div>`;
+      <div class="choices">${q.options.map((o, i) => `<button class="choice" data-i="${i}">${o.picture ? `<img class="c-pic" src="${esc(picSrc(o.picture))}" alt="">` : ""}<span class="jp">${esc(o.kanji || o.word)}</span></button>`).join("")}</div>`;
   } else if (q.type === "listen") {
     body = `<div class="q-instruction">${t("iListen")}</div>
       <div class="q-hero"><button class="icon-btn q-sound" id="sp" aria-label="sound" style="transform:scale(1.8);margin:1.2rem 0 1.6rem">${ICON.sound}</button></div>
@@ -920,8 +1099,9 @@ function renderQuestion() {
       </div></div>`;
   }
   app().innerHTML = `${topbarMin("")}<div class="session">${sessTop()}<div class="q-area" id="qArea">${body}</div><div id="fbSlot"></div></div>`;
-  document.getElementById("backBtn").onclick = () => go(SESS.opts.type === "practice" ? "/" : "/lesson/" + SESS.opts.lesson);
-  document.getElementById("closeX").onclick = () => go(SESS.opts.type === "practice" ? "/" : "/lesson/" + SESS.opts.lesson);
+  const quizBack = () => SESS.opts.type === "practice" ? "/" : SESS.opts.type === "tag" ? "/tag/" + encodeURIComponent(SESS.opts.tag) : "/lesson/" + SESS.opts.lesson;
+  document.getElementById("backBtn").onclick = () => go(quizBack());
+  document.getElementById("closeX").onclick = () => go(quizBack());
   const sp = document.getElementById("sp"); if (sp) sp.onclick = () => playWord(w);
   if (q.type === "listen") playWord(w); // in-gesture (triggered by Continue/choice)
 
@@ -935,7 +1115,7 @@ function renderQuestion() {
   } else if (q.type === "flash") {
     const face = document.getElementById("fcFace"), w2 = w;
     document.getElementById("fc").onclick = () => {
-      face.innerHTML = `${w2.picture ? `<img class="q-pic" src="media/${esc(w2.picture)}" alt="" style="width:120px">` : ""}<div class="q-meaning" style="font-size:1.3rem">${esc(w2.meaning_en)}</div><div class="ruby" style="filter:none">${esc(w2.reading)}</div><div class="muted" style="font-size:.9rem">${esc(w2.romaji)}</div>`;
+      face.innerHTML = `${w2.picture ? `<img class="q-pic" src="${esc(picSrc(w2.picture))}" alt="" style="width:120px">` : ""}<div class="q-meaning" style="font-size:1.3rem">${esc(w2.meaning_en)}</div><div class="ruby" style="filter:none">${esc(w2.reading)}</div><div class="muted" style="font-size:.9rem">${esc(w2.romaji)}</div>`;
     };
     showFooter(`<div class="grade-row"><button class="btn btn-block" id="againBtn">${ICON.batsu}${t("again")}</button><button class="btn btn-ink btn-block" id="goodBtn">${ICON.maru}${t("good")}</button></div>`);
     document.getElementById("againBtn").onclick = () => gradeSelf(q, false);
@@ -947,7 +1127,7 @@ function recordAnswer(q, correct) {
   const first = !SESS.seenIds.has(q.w.id); SESS.seenIds.add(q.w.id);
   srsUpdate(q.w.id, correct);
   if (correct) { if (first && !SESS.wrongIds.has(q.w.id)) SESS.correctFirst++; addXp(10); }
-  else { SESS.wrongIds.add(q.w.id); if (S.settings.strict) SESS.hearts--; SESS.queue.push(makeQuestion(q.w, "mcq_meaning", SESS.opts.type === "practice" ? VOCAB : (BY_LESSON[SESS.opts.lesson] || VOCAB))); SESS.total++; }
+  else { SESS.wrongIds.add(q.w.id); if (S.settings.strict) SESS.hearts--; SESS.queue.push(makeQuestion(q.w, "mcq_meaning", SESS.opts.type === "practice" ? VOCAB : SESS.opts.type === "tag" ? (BY_TAG[SESS.opts.tag] || VOCAB) : (BY_LESSON[SESS.opts.lesson] || VOCAB))); SESS.total++; }
   beep(correct);
 }
 function showMark(ok) { const a = document.getElementById("qArea"); if (a) a.insertAdjacentHTML("beforeend", ok ? maruMark() : batsuMark()); }
@@ -1272,6 +1452,15 @@ async function boot() {
     setInterval(() => { try { const s = window.speechSynthesis; if (s.paused && s.speaking) s.resume(); } catch {} }, 4000);
     document.addEventListener("visibilitychange", () => { try { if (!document.hidden) window.speechSynthesis.resume(); } catch {} });
   }
+  // Paste an image from the clipboard (⌘/Ctrl+V) while creating a set.
+  document.addEventListener("paste", async (e) => {
+    if ((location.hash.replace(/^#/, "")) !== "/create") return;
+    const items = e.clipboardData && e.clipboardData.items; if (!items) return;
+    const it = [...items].find((x) => x.type && x.type.startsWith("image/")); if (!it) return;
+    const f = it.getAsFile(); if (!f) return;
+    e.preventDefault();
+    try { CREATE.pic = await fileToDataUrl(f, 400); updateCreatePicBox(); toast(t("imgAdded")); } catch {}
+  });
   app().innerHTML = `<div class="loading">${t("loading")}</div>`;
   try { await loadVocab(); } catch (e) { app().innerHTML = `<div class="loading">⚠ ${esc(String(e))}</div>`; return; }
   window.addEventListener("hashchange", route);

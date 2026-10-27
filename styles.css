@@ -143,6 +143,18 @@ svg { display: block; }
 .set-info small { color: var(--gray); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 .set-edit, .set-del { flex: none; }
 .set-del { color: var(--gray); margin-right: .4rem; }
+.finput { width: 100%; font-family: var(--sans); font-size: .98rem; border: 1px solid var(--line); border-radius: 10px; padding: .65rem .75rem; background: var(--card); color: var(--ink); }
+.finput:focus { outline: none; border-color: var(--indigo); }
+.wform { display: flex; flex-direction: column; gap: .5rem; }
+.wform-row { display: flex; gap: .5rem; }
+.wform-row > .finput { flex: 1; min-width: 0; }
+.wform-row > #fLesson { max-width: 5.5rem; }
+.wform-pic { flex: none; width: 46px; height: 46px; border-radius: 10px; border: 1px dashed var(--line); background: var(--card) center/cover no-repeat; color: var(--gray); display: grid; place-items: center; }
+.wform-pic.has { border-style: solid; }
+.wform-drop { width: 100%; min-height: 120px; border-radius: 12px; border: 1.5px dashed var(--line); background: var(--card) center/cover no-repeat;
+  color: var(--gray); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .45rem; font-size: .85rem; padding: .8rem; text-align: center; }
+.wform-drop .ico { width: 1.9rem; height: 1.9rem; }
+.wform-drop.has { border-style: solid; min-height: 170px; }
 .set-textarea { width: 100%; min-height: 220px; font-family: var(--mincho); font-size: 1rem; line-height: 1.7;
   border: 1px solid var(--line); border-radius: 12px; padding: .8rem .9rem; background: var(--card); color: var(--ink); resize: vertical; }
 .set-textarea:focus { outline: none; border-color: var(--indigo); }
@@ -286,10 +298,22 @@ svg { display: block; }
 .intro .sub { color: var(--gray); margin-bottom: 1.4rem; }
 .wordlist { display: flex; flex-direction: column; gap: .1rem; margin: 1.2rem 0; }
 .wl { display: flex; align-items: center; gap: .8rem; padding: .7rem .2rem; border-bottom: 1px solid var(--line-soft); }
-.wl .wl-jp { font-family: var(--mincho); font-size: 1.15rem; min-width: 5.5rem; }
-.wl .wl-en { color: var(--gray); font-size: .92rem; }
-.wl .wl-box { margin-left: auto; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.wl .wl-pic { flex: none; width: 40px; height: 40px; border-radius: 8px; border: 1px dashed var(--line); background: var(--card) center/cover no-repeat; color: var(--gray); display: grid; place-items: center; padding: 0; }
+.wl .wl-pic .ico { width: 1.1rem; height: 1.1rem; }
+.wl .wl-pic.has { border-style: solid; border-color: var(--line); }
+.wl .wl-jp { font-family: var(--mincho); font-size: 1.15rem; min-width: 4.5rem; }
+.wl .wl-en { color: var(--gray); font-size: .92rem; flex: 1; }
+.wl .wl-lesson-tag { font-size: .75rem; color: var(--gray); white-space: nowrap; opacity: .7; }
+.wl .wl-right { flex: 1; display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+.wl .wl-tags { display: flex; flex-wrap: wrap; gap: .25rem; }
+.wl .wl-box { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
 .wl .wl-box.b { background: var(--vermilion); }
+.wl-editform { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .8rem; margin: -.2rem 0 .4rem; display: flex; flex-direction: column; gap: .5rem; }
+.tag-chip { display: inline-block; font-size: .68rem; padding: .1rem .45rem; border-radius: 99px; background: var(--line-soft); color: var(--gray); border: 1px solid var(--line); }
+.tag-row { display: flex; flex-wrap: wrap; gap: .5rem; padding: .4rem 0 1rem; }
+.tag-pill { display: flex; align-items: center; gap: .4rem; padding: .45rem .9rem; border-radius: 99px; background: var(--card); border: 1.5px solid var(--line); font-size: .9rem; cursor: pointer; }
+.tag-pill:active { background: var(--line-soft); }
+.tag-count { font-size: .78rem; color: var(--gray); }
 
 /* settings */
 .h1 { font-family: var(--mincho); font-size: 1.45rem; font-weight: 700; margin: .4rem 0 1rem; }

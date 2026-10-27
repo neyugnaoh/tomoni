@@ -207,6 +207,7 @@ if (fs.existsSync(SETS_DIR)) {
       words = words.map((w, i) => ({
         id: w.id || `${name}-${i}`, lesson: w.lesson || 1, word: w.word, kanji: w.kanji || "",
         reading: w.reading || w.word, romaji: w.romaji || "", meaning_en: w.meaning_en || w.meaning || "",
+        tags: w.tags || [],
         picture: null, audio: null, example: w.example || { jp: "", en: "", audio: null }, forms: w.forms || {},
       })).filter((w) => w.word);
       if (words.length) { extraSets.push({ id: "bundled-" + name.toLowerCase().replace(/\s+/g, "-"), name, words }); }
@@ -215,7 +216,6 @@ if (fs.existsSync(SETS_DIR)) {
 }
 const bundledJs =
   "window.BUNDLED_SETS = [\n" +
-  '  { id: "minna", name: "Minna no Nihongo N5", words: window.VOCAB_DATA },\n' +
   extraSets.map((s) => "  " + JSON.stringify(s)).join(",\n") +
   (extraSets.length ? "\n" : "") +
   "];\n";
@@ -241,7 +241,7 @@ console.log(`  media copied: ${copied}  (missing refs: ${missing})`);
 console.log(`  with picture: ${vocab.filter((v) => v.picture).length}`);
 console.log(`  with audio:   ${vocab.filter((v) => v.audio).length}`);
 console.log(`  with example: ${vocab.filter((v) => v.example.jp).length}`);
-console.log(`  bundled sets: ${1 + extraSets.length} (minna${extraSets.length ? " + " + extraSets.map((s) => s.name).join(", ") : ""})`);
+console.log(`  bundled sets: ${extraSets.length}${extraSets.length ? " (" + extraSets.map((s) => s.name).join(", ") + ")" : ""}`);
 
 // Clean up temp extraction
 fs.rmSync(TMP, { recursive: true, force: true });

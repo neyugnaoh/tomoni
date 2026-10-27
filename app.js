@@ -551,7 +551,8 @@ function route() {
   if (h === "/create") return renderCreate();
   if ((m = h.match(/^\/edit\/(.+)$/))) return renderEditSet(m[1]);
   if (h === "/settings") return renderSettings();
-  if (h === "/vocab") return renderVocab();
+  if (h === "/vocab") return renderSets();   // vocab entry = set list first
+  if (h === "/lessons") return renderLessons(); // chosen set's lesson path
   return renderHub();
 }
 
@@ -623,41 +624,36 @@ function renderHub() {
 }
 
 /* -------------------------------------------------------------- VOCAB (lesson path) */
-function renderVocab() {
+// Duolingo-style serpentine offsets (−2..2), repeats; scaled by --wave in CSS.
+const WAVE_K = [0, 1, 2, 1, 0, -1, -2, -1];
+function renderLessons() {
   const dueTotal = allDue().length;
-  const lcell = (no, { label }) => {
+  const lcell = (no, { label }, i) => {
     const crown = lessonCrown(no);
     const due = lessonDue(no);
     const started = !!(BY_LESSON[no] || []).some((w) => S.progress[w.id]);
     const cls = ["lcell"]; if (crown || started) cls.push("done");
-    return `<button class="${cls.join(" ")}" data-target="/lesson/${no}">
+    return `<button class="${cls.join(" ")}" data-target="/lesson/${no}" style="--k:${WAVE_K[i % WAVE_K.length]}">
       ${due ? `<span class="due">${due}</span>` : ""}
       <span class="sq">${no}</span>
       <span class="crown">${crown ? Array.from({ length: crown }, () => "<i></i>").join("") : ""}</span>
       <span class="lc-label">${esc(label)}</span>
     </button>`;
   };
-  let col = "";
   const core = LESSONS.filter((n) => n >= 1);
-  core.forEach((no, i) => { col += lcell(no, { label: `${t("lesson")} ${no}` }); if (i < core.length - 1) col += `<div class="path-link"></div>`; });
-  if (BY_LESSON[0]?.length) col += `<div class="path-link"></div>` + lcell(0, { label: t("extra") });
+  let col = core.map((no, i) => lcell(no, { label: `${t("lesson")} ${no}` }, i)).join("");
+  if (BY_LESSON[0]?.length) col += lcell(0, { label: t("extra") }, core.length);
 
-  app().innerHTML = `${topbarMin(t("dashVocab"))}
+  app().innerHTML = `${topbarMin(activeSetName())}
     <div class="view">
-      <button class="setbar" id="setBar">
-        <span class="sb-ico">${ICON.library}</span>
-        <span class="sb-txt"><small>${t("setBar")}</small><b>${esc(activeSetName())}</b></span>
-        <span class="sb-arrow">${ICON.next}</span>
-      </button>
       <button class="btn btn-ink btn-block practice" id="practiceBtn">
         ${ICON.practice}
         <span class="p-txt"><b>${t("practice")}</b><small>${dueTotal ? t("practiceSub", dueTotal) : t("practiceNone")}</small></span>
       </button>
       <div class="section-head">${t("coreLessons")}</div>
-      <div class="lesson-col">${col}</div>
+      <div class="lesson-col winding">${col}</div>
     </div>`;
-  bindBack("/");
-  document.getElementById("setBar").onclick = () => go("/sets");
+  bindBack("/vocab");
   document.getElementById("practiceBtn").onclick = () => go("/practice");
   app().querySelectorAll("[data-target]").forEach((b) => b.onclick = () => go(b.dataset.target));
 }
@@ -1283,5 +1279,5 @@ async function boot() {
   if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js").catch(() => {});
 }
 // Re-load the active set's words, then navigate home.
-async function switchSet(id) { SETSREG.active = id; saveSetsReg(); await loadVocab(); go("/"); if ((location.hash.replace(/^#/, "") || "/") === "/") renderHome(); }
+async function switchSet(id) { SETSREG.active = id; saveSetsReg(); await loadVocab(); go("/lessons"); }
 boot();

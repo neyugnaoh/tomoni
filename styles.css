@@ -136,11 +136,12 @@ svg { display: block; }
 .set-list { display: flex; flex-direction: column; gap: .5rem; }
 .set-row { display: flex; align-items: center; background: var(--card); border: 2px solid var(--line); border-radius: 12px; overflow: hidden; }
 .set-row.active { border-color: var(--vermilion); }
-.set-pick { flex: 1; display: flex; align-items: center; gap: .7rem; background: none; border: none; padding: .85rem .9rem; text-align: left; }
+.set-pick { flex: 1; min-width: 0; display: flex; align-items: center; gap: .7rem; background: none; border: none; padding: .85rem .9rem; text-align: left; }
 .set-mark { width: 1.3rem; color: var(--vermilion); display: inline-grid; } .set-mark .ico { width: 1.3rem; height: 1.3rem; }
 .set-info { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
-.set-info b { font-family: var(--mincho); font-size: 1.05rem; }
-.set-info small { color: var(--gray); font-size: .8rem; }
+.set-info b { font-family: var(--mincho); font-size: 1.05rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.set-info small { color: var(--gray); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.set-edit, .set-del { flex: none; }
 .set-del { color: var(--gray); margin-right: .4rem; }
 .set-textarea { width: 100%; min-height: 220px; font-family: var(--mincho); font-size: 1rem; line-height: 1.7;
   border: 1px solid var(--line); border-radius: 12px; padding: .8rem .9rem; background: var(--card); color: var(--ink); resize: vertical; }
@@ -182,6 +183,10 @@ svg { display: block; }
 /* ---------------------------------------------------------------- lesson column (path) */
 .section-head { text-align: center; margin: 1.4rem 0 1rem; color: var(--gray); font-weight: 600; letter-spacing: .1em; font-size: .74rem; text-transform: uppercase; }
 .lesson-col { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+/* Duolingo-style serpentine: nodes offset by --k (−2..2) × --wave. */
+.lesson-col.winding { --wave: 38px; gap: 1.25rem; }
+.lesson-col.winding .lcell { transform: translateX(calc(var(--k, 0) * var(--wave))); transition: transform .2s ease; }
+@media (min-width: 620px) { .lesson-col.winding { --wave: 72px; gap: 1.5rem; } .lesson-col.winding .lcell .sq { width: 84px; height: 84px; font-size: 2rem; } }
 .lcell { position: relative; display: flex; flex-direction: column; align-items: center; gap: .35rem; border: none; background: none; }
 .lcell .sq {
   width: 72px; height: 72px; display: grid; place-items: center; border-radius: 4px;

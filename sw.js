@@ -4,7 +4,7 @@
  * - shell:  stale-while-revalidate (fast load, updates next visit)
  * Bump VERSION when you change cached shell files.
  */
-const VERSION = "jl-v5";
+const VERSION = "jl-v6";
 const SHELL = [
   "./", "./index.html", "./styles.css", "./app.js", "./reading.js",
   "./data/vocab.js", "./data/bundled.js", "./manifest.json", "./icon.svg",

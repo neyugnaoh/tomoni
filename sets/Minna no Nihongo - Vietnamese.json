@@ -16,7 +16,6 @@
   {"lesson":1,"word":"なんさい","kanji":"何歳","reading":"なんさい","meaning_en":"mấy tuổi, bao nhiêu tuổi","tags":["question words"]},
   {"lesson":1,"word":"はい","kanji":"","reading":"はい","meaning_en":"vâng, dạ","tags":["basics"]},
   {"lesson":1,"word":"いいえ","kanji":"","reading":"いいえ","meaning_en":"không","tags":["basics"]},
-
   {"lesson":2,"word":"これ","kanji":"","reading":"これ","meaning_en":"cái này, đây (vật ở gần người nói)","tags":["demonstratives"]},
   {"lesson":2,"word":"それ","kanji":"","reading":"それ","meaning_en":"cái đó, đó (vật ở gần người nghe)","tags":["demonstratives"]},
   {"lesson":2,"word":"あれ","kanji":"","reading":"あれ","meaning_en":"cái kia, kia (vật ở xa cả người nói và người nghe)","tags":["demonstratives"]},
@@ -49,7 +48,6 @@
   {"lesson":2,"word":"にほんご","kanji":"日本語","reading":"にほんご","meaning_en":"tiếng Nhật","tags":["language"]},
   {"lesson":2,"word":"なん","kanji":"何","reading":"なん","meaning_en":"gì, cái gì","tags":["question words"]},
   {"lesson":2,"word":"そう","kanji":"","reading":"そう","meaning_en":"vậy","tags":["basics"]},
-
   {"lesson":3,"word":"ここ","kanji":"","reading":"ここ","meaning_en":"chỗ này, đằng này, đây (gần người nói)","tags":["demonstratives"]},
   {"lesson":3,"word":"そこ","kanji":"","reading":"そこ","meaning_en":"chỗ đó, đó (gần người nghe)","tags":["demonstratives"]},
   {"lesson":3,"word":"あそこ","kanji":"","reading":"あそこ","meaning_en":"chỗ kia, đằng kia, kia (xa cả người nói và người nghe)","tags":["demonstratives"]},
@@ -83,7 +81,6 @@
   {"lesson":3,"word":"ひゃく","kanji":"百","reading":"ひゃく","meaning_en":"trăm","tags":["numbers"]},
   {"lesson":3,"word":"せん","kanji":"千","reading":"せん","meaning_en":"nghìn","tags":["numbers"]},
   {"lesson":3,"word":"まん","kanji":"万","reading":"まん","meaning_en":"mười nghìn, vạn","tags":["numbers"]},
-
   {"lesson":4,"word":"おきます","kanji":"起きます","reading":"おきます","meaning_en":"dậy, thức dậy","tags":["verbs"]},
   {"lesson":4,"word":"ねます","kanji":"寝ます","reading":"ねます","meaning_en":"ngủ, đi ngủ","tags":["verbs"]},
   {"lesson":4,"word":"はたらきます","kanji":"働きます","reading":"はたらきます","meaning_en":"làm việc","tags":["verbs"]},
@@ -126,7 +123,6 @@
   {"lesson":4,"word":"どようび","kanji":"土曜日","reading":"どようび","meaning_en":"thứ bảy","tags":["days"]},
   {"lesson":4,"word":"にちようび","kanji":"日曜日","reading":"にちようび","meaning_en":"chủ nhật","tags":["days"]},
   {"lesson":4,"word":"なんようび","kanji":"何曜日","reading":"なんようび","meaning_en":"thứ mấy","tags":["question words","days"]},
-
   {"lesson":5,"word":"いきます","kanji":"行きます","reading":"いきます","meaning_en":"đi","tags":["verbs","movement"]},
   {"lesson":5,"word":"きます","kanji":"来ます","reading":"きます","meaning_en":"đến","tags":["verbs","movement"]},
   {"lesson":5,"word":"かえります","kanji":"帰ります","reading":"かえります","meaning_en":"về","tags":["verbs","movement"]},

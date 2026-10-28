@@ -4,7 +4,7 @@
  * - shell:  stale-while-revalidate (fast load, updates next visit)
  * Bump VERSION when you change cached shell files.
  */
-const VERSION = "jl-v7";
+const VERSION = "jl-v8";
 const SHELL = [
   "./", "./index.html", "./styles.css", "./app.js", "./reading.js",
   "./data/vocab.js", "./data/bundled.js", "./manifest.json", "./icon.svg",
@@ -28,8 +28,10 @@ self.addEventListener("fetch", (e) => {
   const sameOrigin = url.origin === location.origin;
 
   // Media: cache-first (files never change — keyed by id).
+  // Only cache successful responses, so a transient 404 (e.g. an image fetched
+  // before it was added) never gets stuck in the cache.
   if (url.pathname.includes("/media/")) {
-    e.respondWith(caches.open(VERSION).then((c) => c.match(req).then((hit) => hit || fetch(req).then((res) => { c.put(req, res.clone()); return res; }))));
+    e.respondWith(caches.open(VERSION).then((c) => c.match(req).then((hit) => hit || fetch(req).then((res) => { if (res && res.ok) c.put(req, res.clone()); return res; }))));
     return;
   }
 

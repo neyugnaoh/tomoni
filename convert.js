@@ -100,6 +100,23 @@ fs.rmSync(MEDIA_DIR, { recursive: true, force: true });
 for (const sub of ["pic", "audio", "sentence"]) {
   fs.mkdirSync(path.join(MEDIA_DIR, sub), { recursive: true });
 }
+// Images for hand-authored bundled sets live in sets-media/ (committed source of
+// truth) and are copied into media/sets/ so they survive the media/ wipe above.
+// Reference them from a set's JSON as  "picture": "sets/<filename>".
+const SETS_MEDIA_SRC = path.join(ROOT, "sets-media");
+const { romajiFile } = require("./tools/romaji");
+const setImgByStem = {}; // "okimasu" -> "okimasu.jpg", for auto-linking by reading
+let setImgs = 0;
+if (fs.existsSync(SETS_MEDIA_SRC)) {
+  const dest = path.join(MEDIA_DIR, "sets");
+  fs.mkdirSync(dest, { recursive: true });
+  for (const f of fs.readdirSync(SETS_MEDIA_SRC)) {
+    if (!/\.(png|jpe?g|webp|gif|svg)$/i.test(f)) continue;
+    fs.copyFileSync(path.join(SETS_MEDIA_SRC, f), path.join(dest, f));
+    setImgByStem[f.replace(/\.[^.]+$/, "").toLowerCase()] = f;
+    setImgs++;
+  }
+}
 let copied = 0,
   missing = 0;
 function copyMedia(realName, destRel) {
@@ -204,12 +221,20 @@ if (fs.existsSync(SETS_DIR)) {
       } else if (/\.(csv|tsv|txt)$/i.test(file)) {
         words = parseDelimited(fs.readFileSync(full, "utf8"));
       } else continue;
-      words = words.map((w, i) => ({
-        id: w.id || `${name}-${i}`, lesson: w.lesson || 1, word: w.word, kanji: w.kanji || "",
-        reading: w.reading || w.word, romaji: w.romaji || "", meaning_en: w.meaning_en || w.meaning || "",
-        tags: w.tags || [],
-        picture: null, audio: null, example: w.example || { jp: "", en: "", audio: null }, forms: w.forms || {},
-      })).filter((w) => w.word);
+      words = words.map((w, i) => {
+        const reading = w.reading || w.word;
+        // picture: an explicit path wins; otherwise auto-link a sets-media/ file
+        // whose name matches the word's romaji (e.g. おきます → sets-media/okimasu.jpg).
+        // Explicit value may be a path under media/ ("sets/x.jpg") or a full URL.
+        let picture = w.picture || null;
+        if (!picture) { const hit = setImgByStem[romajiFile(reading)]; if (hit) picture = "sets/" + hit; }
+        return {
+          id: w.id || `${name}-${i}`, lesson: w.lesson || 1, word: w.word, kanji: w.kanji || "",
+          reading, romaji: w.romaji || "", meaning_en: w.meaning_en || w.meaning || "",
+          tags: w.tags || [],
+          picture, audio: null, example: w.example || { jp: "", en: "", audio: null }, forms: w.forms || {},
+        };
+      }).filter((w) => w.word);
       if (words.length) { extraSets.push({ id: "bundled-" + name.toLowerCase().replace(/\s+/g, "-"), name, words }); }
     } catch (e) { console.warn("  skip set " + file + ": " + e.message); }
   }
@@ -242,6 +267,7 @@ console.log(`  with picture: ${vocab.filter((v) => v.picture).length}`);
 console.log(`  with audio:   ${vocab.filter((v) => v.audio).length}`);
 console.log(`  with example: ${vocab.filter((v) => v.example.jp).length}`);
 console.log(`  bundled sets: ${extraSets.length}${extraSets.length ? " (" + extraSets.map((s) => s.name).join(", ") + ")" : ""}`);
+console.log(`  set images:   ${setImgs} (from sets-media/)`);
 
 // Clean up temp extraction
 fs.rmSync(TMP, { recursive: true, force: true });

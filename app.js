@@ -462,6 +462,15 @@ function wordHero(w, { rubyHidden, ink } = {}) {
   const ruby = hasKanji ? splitJp(w.reading).hero : "";
   return genkoHero({ hero: main.hero, ruby, annot: null, rubyHidden, ink, note: main.note });
 }
+// Inline kanji + furigana for compact spots (answer choices, word lists).
+// Kana-only words render plainly; kanji words get a <ruby> so learners can
+// always read them.
+function rubyJp(w, cls) {
+  const hasKanji = w.kanji && w.kanji !== w.word && w.kanji !== w.reading;
+  if (!hasKanji) return `<span class="${cls}">${esc(w.kanji || w.word)}</span>`;
+  return `<ruby class="${cls}">${esc(splitJp(w.kanji).hero)}<rt>${esc(splitJp(w.reading).hero)}</rt></ruby>`;
+}
+const choiceJp = (w) => rubyJp(w, "jp");
 
 /* ------------------------------------------------------------------- audio */
 let AC = null;
@@ -946,7 +955,7 @@ function renderIntro(no) {
   const list = ws.map((w) => {
     const box = S.progress[w.id]?.box || 0;
     const chips = (w.tags || []).map((g) => `<span class="tag-chip">${esc(g)}</span>`).join("");
-    return `<div class="wl"><span class="wl-jp">${esc(w.kanji || w.word)}</span><div class="wl-right"><span class="wl-en">${esc(w.meaning_en)}</span>${chips ? `<div class="wl-tags">${chips}</div>` : ""}</div><span class="wl-box ${box >= 4 ? "b" : ""}"></span></div>`;
+    return `<div class="wl">${rubyJp(w, "wl-jp")}<div class="wl-right"><span class="wl-en">${esc(w.meaning_en)}</span>${chips ? `<div class="wl-tags">${chips}</div>` : ""}</div><span class="wl-box ${box >= 4 ? "b" : ""}"></span></div>`;
   }).join("");
   app().innerHTML = `${topbarMin(title)}
     <div class="view intro">
@@ -968,7 +977,7 @@ function renderTagIntro(tag) {
   const ws = BY_TAG[tag] || []; if (!ws.length) { go("/"); return; }
   const list = ws.map((w) => {
     const box = S.progress[w.id]?.box || 0;
-    return `<div class="wl"><span class="wl-jp">${esc(w.kanji || w.word)}</span><div class="wl-right"><span class="wl-en">${esc(w.meaning_en)}</span><span class="wl-lesson-tag">${t("lesson")} ${w.lesson}</span></div><span class="wl-box ${box >= 4 ? "b" : ""}"></span></div>`;
+    return `<div class="wl">${rubyJp(w, "wl-jp")}<div class="wl-right"><span class="wl-en">${esc(w.meaning_en)}</span><span class="wl-lesson-tag">${t("lesson")} ${w.lesson}</span></div><span class="wl-box ${box >= 4 ? "b" : ""}"></span></div>`;
   }).join("");
   app().innerHTML = `${topbarMin(esc(tag))}
     <div class="view intro">
@@ -986,7 +995,9 @@ function renderTagIntro(tag) {
 let LRN = null;
 function renderLearn(no) {
   const ws = BY_LESSON[no] || []; if (!ws.length) { go("/"); return; }
-  if (!LRN || LRN.no !== no) LRN = { no, order: shuffle(ws), idx: 0 };
+  // Learn goes in lesson order (not shuffled) so new words build up predictably;
+  // only the test shuffles. The card is navigable back and forth.
+  if (!LRN || LRN.no !== no) LRN = { no, order: ws, idx: 0 };
   if (LRN.idx >= LRN.order.length) return renderLearnDone(no);
   const w = LRN.order[LRN.idx];
   const pct = Math.round((LRN.idx / LRN.order.length) * 100);
@@ -996,15 +1007,16 @@ function renderLearn(no) {
       <div class="q-area">
         <div class="fc">
           <div class="fc-face">
-            ${w.picture ? `<img class="q-pic" src="${esc(picSrc(w.picture))}" alt="" style="width:130px">` : ""}
+            ${w.picture ? `<img class="learn-pic" src="${esc(picSrc(w.picture))}" alt="">` : ""}
             ${wordHero(w, { rubyHidden: false, ink: true })}
             <div class="q-meaning" style="font-size:1.25rem">${esc(w.meaning_en)}</div>
             <div class="muted" style="font-size:.9rem">${esc(w.romaji)}</div>
           </div>
         </div>
         <div class="nt-actions" style="margin-top:1.4rem">
+          <button class="btn btn-ink-outline" id="prevBtn"${LRN.idx === 0 ? " disabled" : ""} aria-label="prev">${ICON.back}</button>
           <button class="btn btn-ink-outline" id="sp">${ICON.sound}${t("ntListen")}</button>
-          <button class="btn btn-ink" id="nextBtn">${t("ntNext")} ${ICON.next}</button>
+          <button class="btn btn-ink" id="nextBtn">${LRN.idx + 1 >= LRN.order.length ? t("startTest") : t("ntNext")} ${ICON.next}</button>
         </div>
         <div class="center muted mt" style="font-size:.8rem">${t("learnProgress", LRN.idx + 1, LRN.order.length)}</div>
       </div>
@@ -1012,6 +1024,7 @@ function renderLearn(no) {
   bindBack("/lesson/" + no);
   document.getElementById("closeX").onclick = () => go("/lesson/" + no);
   document.getElementById("sp").onclick = () => playWord(w);
+  document.getElementById("prevBtn").onclick = () => { if (LRN.idx > 0) { LRN.idx--; renderLearn(no); } };
   document.getElementById("nextBtn").onclick = () => { srsUpdate(w.id, true); LRN.idx++; save(); renderLearn(no); };
   playWord(w); // in-gesture (triggered by tapping the lesson / Next)
 }
@@ -1081,11 +1094,11 @@ function renderQuestion() {
   } else if (q.type === "mcq_word") {
     body = `<div class="q-instruction">${t("iWord")}</div>
       <div class="q-hero"><div class="q-meaning">${esc(w.meaning_en)}</div></div>
-      <div class="choices">${q.options.map((o, i) => `<button class="choice" data-i="${i}">${o.picture ? `<img class="c-pic" src="${esc(picSrc(o.picture))}" alt="">` : ""}<span class="jp">${esc(o.kanji || o.word)}</span></button>`).join("")}</div>`;
+      <div class="choices">${q.options.map((o, i) => `<button class="choice" data-i="${i}">${o.picture ? `<img class="c-pic" src="${esc(picSrc(o.picture))}" alt="">` : ""}${choiceJp(o)}</button>`).join("")}</div>`;
   } else if (q.type === "listen") {
     body = `<div class="q-instruction">${t("iListen")}</div>
       <div class="q-hero"><button class="icon-btn q-sound" id="sp" aria-label="sound" style="transform:scale(1.8);margin:1.2rem 0 1.6rem">${ICON.sound}</button></div>
-      <div class="choices">${q.options.map((o, i) => `<button class="choice" data-i="${i}"><span class="jp">${esc(o.kanji || o.word)}</span></button>`).join("")}</div>`;
+      <div class="choices">${q.options.map((o, i) => `<button class="choice" data-i="${i}">${choiceJp(o)}</button>`).join("")}</div>`;
   } else if (q.type === "type") {
     body = `<div class="q-instruction">${t("iType")}</div>
       <div class="q-hero"><div class="q-meaning">${esc(w.meaning_en)}</div>${w.kanji && w.kanji !== w.word ? genkoCells(splitJp(w.kanji).hero, true) : ""}

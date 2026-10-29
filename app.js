@@ -1144,11 +1144,12 @@ function recordAnswer(q, correct) {
   beep(correct);
 }
 function showMark(ok) { const a = document.getElementById("qArea"); if (a) a.insertAdjacentHTML("beforeend", ok ? maruMark() : batsuMark()); }
-function feedback(correct, answerText) {
+// answerHtml is already HTML (callers build it with esc()/rubyJp() as needed).
+function feedback(correct, answerHtml) {
   showMark(correct);
   const cls = correct ? "ok" : "no";
   const head = `${correct ? ICON.maru : ICON.batsu}${correct ? t("correct") : t("wrong")}`;
-  const ans = correct ? "" : `<div class="fb-ans">${t("answerWas")} <b>${esc(answerText)}</b></div>`;
+  const ans = correct ? "" : `<div class="fb-ans">${t("answerWas")} <b>${answerHtml}</b></div>`;
   showFooter(`<div class="feedback ${cls}"><div class="fb-head">${head}</div>${ans}<button class="btn ${correct ? "btn-ink" : "btn-ink-outline"} btn-block btn-lg" id="contBtn">${t("cont")}</button></div>`);
   const c = document.getElementById("contBtn"); c.focus(); c.onclick = () => { SESS.idx++; renderQuestion(); };
 }
@@ -1157,7 +1158,7 @@ function gradeMcq(q, i, btn) {
   app().querySelectorAll(".choice").forEach((b, j) => { b.classList.add("disabled"); if (q.options[j].id === q.answer.id) b.classList.add("correct"); });
   if (!correct) btn.classList.add("wrong");
   recordAnswer(q, correct);
-  const ans = q.type === "mcq_meaning" ? q.answer.meaning_en : `${q.answer.kanji || q.answer.word} · ${q.answer.reading}`;
+  const ans = q.type === "mcq_meaning" ? esc(q.answer.meaning_en) : rubyJp(q.answer, "fb-jp");
   feedback(correct, ans);
 }
 function gradeType(q, val) {
@@ -1165,7 +1166,7 @@ function gradeType(q, val) {
   const targets = [q.w.reading, q.w.word, q.w.romaji, toRomaji(q.w.reading)].map(normalize);
   const correct = targets.includes(input);
   recordAnswer(q, correct);
-  feedback(correct, `${q.w.reading}${q.w.romaji ? " · " + q.w.romaji : ""}`);
+  feedback(correct, `${rubyJp(q.w, "fb-jp")}${q.w.romaji ? " · " + esc(q.w.romaji) : ""}`);
 }
 function gradeSelf(q, good) { recordAnswer(q, good); SESS.idx++; renderQuestion(); }
 function renderResult() {

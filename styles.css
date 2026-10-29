@@ -286,6 +286,7 @@ ruby rt { font-family: var(--mincho); font-size: .62em; color: var(--gray); lett
 .feedback .fb-head .ico { width: 1.3rem; height: 1.3rem; }
 .feedback .fb-ans { font-size: .92rem; margin-bottom: .75rem; }
 .feedback .fb-ans b { font-family: var(--mincho); }
+.feedback .fb-ans .fb-jp { font-family: var(--mincho); font-size: 1.15rem; }
 .grade-row { display: flex; gap: .6rem; }
 
 /* result */
